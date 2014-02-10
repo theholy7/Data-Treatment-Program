@@ -34,50 +34,65 @@ class Example(QMainWindow):
         middleHBox = QHBoxLayout() #Include in outerVBox
         bottomHBox = QHBoxLayout() #Include in outerVBox
 
-        topGroupBox.setLayout(topHBox)
-        middleGroupBox.setLayout(middleHBox)
-        bottomGroupBox.setLayout(bottomHBox)
+        topGroupBox.setLayout(topHBox) #Groupbox with Hbox layout
+        middleGroupBox.setLayout(middleHBox) #Groupbox with Hbox layout
+        bottomGroupBox.setLayout(bottomHBox) #Groupbox with Hbox layout
 
-        outerVBox.addWidget(topGroupBox)
+        outerVBox.addWidget(topGroupBox) #Add group boxes to a Vbox layout in central widget
         outerVBox.addWidget(middleGroupBox)
         outerVBox.addWidget(bottomGroupBox)
 
-        #topHBox.addStretch()
-        middleHBox.addStretch(0)
-        bottomHBox.addStretch(1)
-
+        #Create all buttons
         addButton = QPushButton("Add Files")
-        addButton.clicked.connect(self.get_selected_paths)
         validateButton = QPushButton("Validate Files")
         previewButton = QPushButton("Preview Report")
         generateButton = QPushButton("Generate Report")
 
-        model = QFileSystemModel()
-        root_index = model.setRootPath(QDir.currentPath())
+
+        #Following the reddit help I created a File System Model and a TreeView Widget
+        self.model = QFileSystemModel()
+        self.root_index = self.model.setRootPath(QDir.currentPath())
 
         self.tree = QTreeView()
-        self.tree.setModel(model)
-        self.tree.setRootIndex(root_index)
+        self.tree.setModel(self.model)
+        self.tree.setRootIndex(self.root_index)
 
-        self.listWidget = QListWidget(self)
+        #List view to keep added items tha shall be used 
+        self.list = QListView()
 
+        #Table view to create a preview of the file that will be written
+        self.table = QTableView()
+
+        #Add tree and list to GUI
         topHBox.addWidget(self.tree)
-        topHBox.addWidget(self.listWidget)
+        topHBox.addWidget(self.list)
 
+        #Add table to GUI
+        bottomHBox.addWidget(self.table)
+
+        #Add buttons to GUI
         middleHBox.addWidget(addButton)
         middleHBox.addWidget(validateButton)
         middleHBox.addWidget(previewButton)
         middleHBox.addWidget(generateButton)
         
-
+        #Set OuterVbox which contains everything as central widget for GUI main window
         centralWidget.setLayout(outerVBox)
 
+        #add central widget to main window
         self.setCentralWidget(centralWidget)
 
+
+        #Simple status bar
         self.statusBar().showMessage('Ready')
         
+        #Add menus 
         self.appMenus() #Calls AppMenus function
+
+        #Add function to retrieve file paths to "Add" Button
+        addButton.clicked.connect(self.get_selected_paths)
         
+        #Position and Geometry functions for app window
         self.resize(600, 480)
         self.center()        
         self.setWindowTitle('Basic Data File Generator')    
@@ -119,9 +134,13 @@ class Example(QMainWindow):
             event.ignore()
 
     def get_selected_paths(self):
+
         indexes = self.tree.selectedIndexes()
+        print indexes
+        print "\n"
         file_paths = [self.model.filePath(index) for index in indexes]
-        print file_paths
+        file_name = [self.model.fileName(index) for index in indexes]
+        print file_name, file_paths
 
 
 def main():
