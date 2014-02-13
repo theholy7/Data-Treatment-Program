@@ -16,6 +16,7 @@ class AppMainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setWindowTitle('Basic Data File Generator')
+        self.statusbar = self.statusBar().showMessage('Ready')
 
         self.initUI()
 
@@ -35,8 +36,25 @@ class AppMainWindow(QMainWindow):
         self.setCentralWidget(self.centralWidget)
 
     def createmenu(self):
-        self.menubar = QMenuBar()
-        self.menubar.addMenu("&File")
+        self.menubar = QMenuBar(self)
+        self.filemenu = self.menubar.addMenu("&File")
+        self.settingsmenu = self.menubar.addMenu("&Settings")
+
+        self.viewstatusbar = QAction("&Status Bar",self.settingsmenu)
+        self.viewstatusbar.setCheckable(True)
+        self.viewstatusbar.setChecked(True)
+        self.viewstatusbar.setStatusTip("Displays Status Bar")
+        self.viewstatusbar.toggled.connect(self.ViewStatusBar)
+
+        self.settingsmenu.addAction(self.viewstatusbar)
+
+    def ViewStatusBar(self):
+        if self.viewstatusbar.isChecked() == True:
+            self.statusbar = self.statusBar().showMessage("Status Bar is visible", 5000)
+        else:
+            self.setStatusBar(0)
+
+
         
 class CentralWidget(QWidget):
     def __init__(self):
@@ -45,6 +63,7 @@ class CentralWidget(QWidget):
 
     def setLayouts(self):
         self.outerVBox = QVBoxLayout() #Include in widget
+        self.setLayout(self.outerVBox)
 
         self.topGroupBox = QGroupBox("File Management") #GroupBox with name
         self.middleGroupBox = QGroupBox("Action Buttons")
@@ -62,7 +81,18 @@ class CentralWidget(QWidget):
         self.outerVBox.addWidget(self.middleGroupBox)
         self.outerVBox.addWidget(self.bottomGroupBox)
 
-        self.setLayout(self.outerVBox)
+        #Create all buttons
+        self.addButton = QPushButton("Add Files")
+        self.validateButton = QPushButton("Validate Files")
+        self.previewButton = QPushButton("Preview Report")
+        self.generateButton = QPushButton("Generate Report")
+
+        #Add buttons to GUI
+        self.middleHBox.addWidget(self.addButton)
+        self.middleHBox.addWidget(self.validateButton)
+        self.middleHBox.addWidget(self.previewButton)
+        self.middleHBox.addWidget(self.generateButton)
+        self.middleHBox.addStretch()
 
 def main():
     
