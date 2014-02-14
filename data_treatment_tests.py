@@ -52,7 +52,7 @@ class AppMainWindow(QMainWindow):
         if self.viewstatusbar.isChecked() == True:
             self.statusbar = self.statusBar().showMessage("Status Bar is visible", 5000)
         else:
-            self.setStatusBar(0)
+            self.setStatusBar(self.statusbar)
 
 
         
@@ -92,7 +92,28 @@ class CentralWidget(QWidget):
         self.middleHBox.addWidget(self.validateButton)
         self.middleHBox.addWidget(self.previewButton)
         self.middleHBox.addWidget(self.generateButton)
-        self.middleHBox.addStretch()
+        #self.middleHBox.addStretch()
+
+        #Create File System and Tree
+        self.model = QFileSystemModel()
+        self.root_index = self.model.setRootPath(QDir.currentPath())
+
+        self.tree = QTreeView()
+        self.tree.setModel(self.model)
+        self.tree.setRootIndex(self.root_index)
+
+        #List view to keep added items tha shall be used 
+        self.list = QListView()
+
+        #Table view to create a preview of the file that will be written
+        self.table = QTableView()
+
+        #Add tree and list to GUI
+        self.topHBox.addWidget(self.tree)
+        self.topHBox.addWidget(self.list)
+
+        #Add table to GUI
+        self.bottomHBox.addWidget(self.table)
 
 def main():
     
