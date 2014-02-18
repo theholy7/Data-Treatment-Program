@@ -83,6 +83,8 @@ class CentralWidget(QWidget):
 
         #Create all buttons
         self.addButton = QPushButton("Add Files")
+        self.addButton.clicked.connect(self.get_selected_paths)
+
         self.validateButton = QPushButton("Validate Files")
         self.previewButton = QPushButton("Preview Report")
         self.generateButton = QPushButton("Generate Report")
@@ -114,6 +116,15 @@ class CentralWidget(QWidget):
 
         #Add table to GUI
         self.bottomHBox.addWidget(self.table)
+
+    @Slot()
+    def get_selected_paths(self):
+        indexes = self.tree.selectedIndexes()
+        print indexes
+        print "\n"
+        file_paths = [self.model.filePath(index) for index in indexes]
+        file_name = [self.model.fileName(index) for index in indexes]
+        print file_name, file_paths
 
 def main():
     
