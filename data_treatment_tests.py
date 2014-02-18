@@ -98,11 +98,14 @@ class CentralWidget(QWidget):
 
         #Create File System and Tree
         self.model = QFileSystemModel()
+
         self.root_index = self.model.setRootPath(QDir.currentPath())
 
         self.tree = QTreeView()
         self.tree.setModel(self.model)
         self.tree.setRootIndex(self.root_index)
+        self.tree.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.tree.setSelectionBehavior(QAbstractItemView.SelectRows)
 
         #List view to keep added items tha shall be used 
         self.list = QListView()
@@ -117,14 +120,24 @@ class CentralWidget(QWidget):
         #Add table to GUI
         self.bottomHBox.addWidget(self.table)
 
-    @Slot()
+    
     def get_selected_paths(self):
+        #Get selected indexes (name, size, type, date modified)
         indexes = self.tree.selectedIndexes()
-        print indexes
+        #Create lists to store paths and names of files
+        file_paths = []
+        file_name = []
+
+        #For each index, select name (which is column zero)
+        for index in indexes:
+            if index.column() == 0:
+                #Store path of file and name
+                file_paths.append(self.model.filePath(index))
+                file_name.append(self.model.fileName(index))
+
+        print file_name
         print "\n"
-        file_paths = [self.model.filePath(index) for index in indexes]
-        file_name = [self.model.fileName(index) for index in indexes]
-        print file_name, file_paths
+        print file_paths
 
 def main():
     
