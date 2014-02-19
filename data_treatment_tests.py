@@ -36,7 +36,7 @@ class AppMainWindow(QMainWindow):
         self.setCentralWidget(self.centralWidget)
 
     def createmenu(self):
-        self.menubar = QMenuBar(self)
+        self.menubar = self.menuBar()
         self.filemenu = self.menubar.addMenu("&File")
         self.settingsmenu = self.menubar.addMenu("&Settings")
 
