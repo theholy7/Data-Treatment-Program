@@ -107,15 +107,20 @@ class CentralWidget(QWidget):
         self.tree.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.tree.setSelectionBehavior(QAbstractItemView.SelectRows)
 
-        #List view to keep added items tha shall be used 
-        self.list = QListView()
+        #Table view to keep added items tha shall be used 
+        #Item model to use in Table View
+        self.addedfilemodel = QStandardItemModel(0, 2)
+        self.addedfilemodel.setHorizontalHeaderLabels(['Name', 'Path'])
+
+        self.filelist = QTableView()
+        self.filelist.setModel(self.addedfilemodel)
 
         #Table view to create a preview of the file that will be written
         self.table = QTableView()
 
         #Add tree and list to GUI
         self.topHBox.addWidget(self.tree)
-        self.topHBox.addWidget(self.list)
+        self.topHBox.addWidget(self.filelist)
 
         #Add table to GUI
         self.bottomHBox.addWidget(self.table)
@@ -134,6 +139,10 @@ class CentralWidget(QWidget):
                 #Store path of file and name
                 file_paths.append(self.model.filePath(index))
                 file_name.append(self.model.fileName(index))
+                itemname = QStandardItem(self.model.fileName(index), columns=2)
+                itempath = QStandardItem(self.model.filePath(index))
+                itemname.setCheckable(True)
+                self.addedfilemodel.appendRow([itemname, itempath])
 
         print file_name
         print "\n"
