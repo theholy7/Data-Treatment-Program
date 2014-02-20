@@ -34,6 +34,7 @@ class AppMainWindow(QMainWindow):
         self.centralWidget = CentralWidget()
         self.createmenu()
         self.setCentralWidget(self.centralWidget)
+        self.dialogTextBrowser = MyDialog()
 
     def createmenu(self):
         self.menubar = self.menuBar()
@@ -46,13 +47,20 @@ class AppMainWindow(QMainWindow):
         self.viewstatusbar.setStatusTip("Displays Status Bar")
         self.viewstatusbar.toggled.connect(self.ViewStatusBar)
 
+        self.viewOptionsMenu = QAction("&Options...", self.settingsmenu)
+        self.viewOptionsMenu.triggered.connect(self.ViewSettingsWindow)
+
         self.settingsmenu.addAction(self.viewstatusbar)
+        self.settingsmenu.addAction(self.viewOptionsMenu)
 
     def ViewStatusBar(self):
         if self.viewstatusbar.isChecked() == True:
             self.statusbar = self.statusBar().showMessage("Status Bar is visible", 5000)
         else:
             self.setStatusBar(self.statusbar)
+
+    def ViewSettingsWindow(self):
+        self.dialogTextBrowser.exec_()
 
 
         
@@ -158,6 +166,22 @@ class CentralWidget(QWidget):
         indexes = self.filelist.selectedIndexes()
         for index in indexes:
             self.addedfilemodel.removeRow(index.row())
+
+
+class MyDialog(QDialog):
+    def __init__(self):
+        QDialog.__init__(self)
+
+        self.buttonBox = QDialogButtonBox(self)
+        self.buttonBox.setOrientation(Qt.Horizontal)
+        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
+
+        self.textBrowser = QTextBrowser(self)
+        self.textBrowser.append("This is a QTextBrowser!")
+
+        self.verticalLayout = QVBoxLayout(self)
+        self.verticalLayout.addWidget(self.textBrowser)
+        self.verticalLayout.addWidget(self.buttonBox)
 
 def main():
     
