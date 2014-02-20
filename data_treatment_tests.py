@@ -85,12 +85,16 @@ class CentralWidget(QWidget):
         self.addButton = QPushButton("Add Files")
         self.addButton.clicked.connect(self.get_selected_paths)
 
+        self.removeButton = QPushButton("Remove Files")
+        self.removeButton.clicked.connect(self.remove_selected_rows)
+
         self.validateButton = QPushButton("Validate Files")
         self.previewButton = QPushButton("Preview Report")
         self.generateButton = QPushButton("Generate Report")
 
         #Add buttons to GUI
         self.middleHBox.addWidget(self.addButton)
+        self.middleHBox.addWidget(self.removeButton)
         self.middleHBox.addWidget(self.validateButton)
         self.middleHBox.addWidget(self.previewButton)
         self.middleHBox.addWidget(self.generateButton)
@@ -114,6 +118,8 @@ class CentralWidget(QWidget):
 
         self.filelist = QTableView()
         self.filelist.setModel(self.addedfilemodel)
+        self.filelist.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.filelist.setColumnHidden(1,True)
 
         #Table view to create a preview of the file that will be written
         self.table = QTableView()
@@ -147,6 +153,11 @@ class CentralWidget(QWidget):
         print file_name
         print "\n"
         print file_paths
+
+    def remove_selected_rows(self):
+        indexes = self.filelist.selectedIndexes()
+        for index in indexes:
+            self.addedfilemodel.removeRow(index.row())
 
 def main():
     
