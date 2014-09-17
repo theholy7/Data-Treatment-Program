@@ -4,13 +4,14 @@
 """
 Data Treatment Program for INESC-MN
 
-author: José Antunes 
+author: José Antunes
 last edited: 1st Jan 2013
 """
 
 import sys
 from PySide.QtGui import *
 from PySide.QtCore import *
+
 
 class AppMainWindow(QMainWindow):
     def __init__(self):
@@ -24,7 +25,7 @@ class AppMainWindow(QMainWindow):
         self.geometry = self.frameGeometry()
 
         self.centerpoint = QDesktopWidget().availableGeometry().center()
-            
+
         self.geometry.moveCenter(self.centerpoint)
         self.move(self.geometry.topLeft())
 
@@ -40,8 +41,7 @@ class AppMainWindow(QMainWindow):
         self.menubar = self.menuBar()
         self.filemenu = self.menubar.addMenu("&File")
         self.settingsmenu = self.menubar.addMenu("&Settings")
-
-        self.viewstatusbar = QAction("&Status Bar",self.settingsmenu)
+        self.viewstatusbar = QAction("&Status Bar", self.settingsmenu)
         self.viewstatusbar.setCheckable(True)
         self.viewstatusbar.setChecked(True)
         self.viewstatusbar.setStatusTip("Displays Status Bar")
@@ -54,7 +54,7 @@ class AppMainWindow(QMainWindow):
         self.settingsmenu.addAction(self.viewOptionsMenu)
 
     def ViewStatusBar(self):
-        if self.viewstatusbar.isChecked() == True:
+        if self.viewstatusbar.isChecked() is True:
             self.statusbar = self.statusBar().showMessage("Status Bar is visible", 5000)
         else:
             self.setStatusBar(self.statusbar)
@@ -63,29 +63,28 @@ class AppMainWindow(QMainWindow):
         self.dialogTextBrowser.exec_()
 
 
-        
 class CentralWidget(QWidget):
     def __init__(self):
         QWidget.__init__(self)
         self.setLayouts()
 
     def setLayouts(self):
-        self.outerVBox = QVBoxLayout() #Include in widget
+        self.outerVBox = QVBoxLayout()  # Include in widget
         self.setLayout(self.outerVBox)
 
-        self.topGroupBox = QGroupBox("File Management") #GroupBox with name
+        self.topGroupBox = QGroupBox("File Management")  # GroupBox with name
         self.middleGroupBox = QGroupBox("Action Buttons")
         self.bottomGroupBox = QGroupBox("Report Preview")
 
-        self.topHBox = QHBoxLayout() #Include in outerVBox
-        self.middleHBox = QHBoxLayout() #Include in outerVBox
-        self.bottomHBox = QHBoxLayout() #Include in outerVBox
+        self.topHBox = QHBoxLayout()  # Include in outerVBox
+        self.middleHBox = QHBoxLayout()  # Include in outerVBox
+        self.bottomHBox = QHBoxLayout()  # Include in outerVBox
 
-        self.topGroupBox.setLayout(self.topHBox) #Groupbox with Hbox layout
-        self.middleGroupBox.setLayout(self.middleHBox) #Groupbox with Hbox layout
-        self.bottomGroupBox.setLayout(self.bottomHBox) #Groupbox with Hbox layout
+        self.topGroupBox.setLayout(self.topHBox)  # Groupbox with Hbox layout
+        self.middleGroupBox.setLayout(self.middleHBox)  # Groupbox with Hbox layout
+        self.bottomGroupBox.setLayout(self.bottomHBox)  # Groupbox with Hbox layout
 
-        self.outerVBox.addWidget(self.topGroupBox) #Add group boxes to a Vbox layout in central widget
+        self.outerVBox.addWidget(self.topGroupBox)  # Add group boxes to a Vbox layout in central widget
         self.outerVBox.addWidget(self.middleGroupBox)
         self.outerVBox.addWidget(self.bottomGroupBox)
 
@@ -119,7 +118,7 @@ class CentralWidget(QWidget):
         self.tree.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.tree.setSelectionBehavior(QAbstractItemView.SelectRows)
 
-        #Table view to keep added items tha shall be used 
+        #Table view to keep added items tha shall be used
         #Item model to use in Table View
         self.addedfilemodel = QStandardItemModel(0, 2)
         self.addedfilemodel.setHorizontalHeaderLabels(['Name', 'Path'])
@@ -127,7 +126,7 @@ class CentralWidget(QWidget):
         self.filelist = QTableView()
         self.filelist.setModel(self.addedfilemodel)
         self.filelist.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.filelist.setColumnHidden(1,True)
+        self.filelist.setColumnHidden(1, True)
 
         #Table view to create a preview of the file that will be written
         self.table = QTableView()
@@ -139,7 +138,6 @@ class CentralWidget(QWidget):
         #Add table to GUI
         self.bottomHBox.addWidget(self.table)
 
-    
     def get_selected_paths(self):
         #Get selected indexes (name, size, type, date modified)
         indexes = self.tree.selectedIndexes()
@@ -174,7 +172,7 @@ class MyDialog(QDialog):
 
         self.buttonBox = QDialogButtonBox(self)
         self.buttonBox.setOrientation(Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
+        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel | QDialogButtonBox.Ok)
 
         self.textBrowser = QTextBrowser(self)
         self.textBrowser.append("This is a QTextBrowser!")
@@ -182,6 +180,7 @@ class MyDialog(QDialog):
         self.verticalLayout = QVBoxLayout(self)
         self.verticalLayout.addWidget(self.textBrowser)
         self.verticalLayout.addWidget(self.buttonBox)
+
 
 def main():
     
